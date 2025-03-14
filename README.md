@@ -152,3 +152,100 @@ Configure database connection in application.properties.
 Add the required dependencies in POM.xml
 Run the application
 Access the application at http://localhost:8080
+
+**Testing Overview**
+
+1. Testing Frameworks & Tools
+
+**JUnit 5:** For writing unit tests.
+JUnit 5 Annotations
+@Test - Marks a method as a test case.
+@BeforeEach - Executes setup logic before each test method.
+@ExtendWith(MockitoExtension.class) - Enables Mockito support.
+@SpringBootTest - Loads the Spring application context for integration testing.
+Mockito: For mocking dependencies in service and repository tests.
+Spring Boot Test: For integration testing.
+MockMvc: For testing controller endpoints.
+AssertJ & Hamcrest: For assertions and validations.
+
+2. Controller Tests
+
+Controller tests ensure that HTTP requests are processed correctly and return the expected responses.
+
+Annotations Used:
+@WebMvcTest – Used to test Spring MVC controllers.
+@ExtendWith(MockitoExtension.class) – Enables Mockito support.
+@MockitoBean – Mocks dependencies for testing.
+@Autowired – Injects dependencies into test classes.
+@BeforeEach – Runs setup before each test.
+@Test – Marks methods as test cases.
+
+UserControllerTest
+
+Test user registration page (/signup) → Checks if the page loads properly.
+Test successful user registration → Ensures a new user can be saved successfully.
+Test user registration with existing email → Checks if the system prevents duplicate registrations.
+Test user login page (/login) → Verifies login page rendering.
+Test role-based redirections → Ensures doctors and patients are redirected correctly upon login.
+
+DoctorControllerTest
+
+Test doctor registration (/doctors/save-details) → Validates doctor profile creation.
+Test updating doctor availability → Ensures doctors can modify their available slots.
+Test retrieving doctor details (/doctors/view-details) → Fetches doctor information.
+
+4.3 Service Layer Tests
+
+Service tests verify business logic implementation and interaction with repositories.
+
+Annotations Used:
+
+@SpringBootTest – Loads the full Spring Boot application context.
+
+@MockBean – Mocks service dependencies.
+
+@InjectMocks – Injects dependencies into test classes.
+
+UserServiceTest
+
+@Test
+void testSaveUser() {
+    when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encodedPassword");
+    when(userRepository.save(any(User.class))).thenReturn(user);
+
+    User savedUser = userService.save(userDto);
+    assertThat(savedUser).isNotNull();
+    assertThat(savedUser.getEmail()).isEqualTo("test@gmail.com");
+}
+
+Test saving a new user → Checks password encoding and persistence.
+
+Test retrieving users by email → Ensures email lookup functionality.
+
+4.4 Repository Layer Tests
+
+Repository tests validate database interactions.
+
+Annotations Used:
+
+@ExtendWith(MockitoExtension.class) – Enables Mockito framework.
+
+@Mock – Mocks repository interfaces.
+
+@BeforeEach – Runs setup before each test.
+
+@Test – Marks methods as test cases.
+
+UserRepositoryTest
+
+@Test
+void testFindByEmail_WhenUserExists() {
+    when(userRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(user));
+    Optional<User> foundUser = userRepository.findByEmail("test@gmail.com");
+    assertThat(foundUser).isPresent();
+    assertThat(foundUser.get().getEmail()).isEqualTo("test@gmail.com");
+}
+
+Test finding user by email → Ensures user retrieval by email.
+
+Test saving users → Checks data persistence.
