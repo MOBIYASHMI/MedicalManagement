@@ -306,14 +306,42 @@ Annotations Used:
 
 UserRepositoryTest
 
-@Test
-void testFindByEmail_WhenUserExists() {
-    when(userRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(user));
-    Optional<User> foundUser = userRepository.findByEmail("test@gmail.com");
-    assertThat(foundUser).isPresent();
-    assertThat(foundUser.get().getEmail()).isEqualTo("test@gmail.com");
-}
+Tests user-related database operations.
+Ensures users can be retrieved by email.
+Checks if the repository correctly returns an empty result for non-existing users.
+Verifies that user data is saved successfully.
 
-Test finding user by email → Ensures user retrieval by email.
+PatientRepositoryTest
 
-Test saving users → Checks data persistence.
+Tests database interactions for patient records.
+Ensures patients can be retrieved using their user ID.
+Validates that empty results are returned when no patient exists.
+Verifies that patient records are saved correctly.
+
+DoctorRepositoryTest
+
+Tests doctor-related database queries.
+Ensures doctors can be retrieved by their user ID.
+Checks if the repository correctly returns an empty result for non-existing doctors.
+Verifies that doctor data is saved and updated properly.
+
+AppointmentRepositoryTest
+
+Tests appointment-related database operations.
+Ensures appointments can be retrieved by patient or doctor.
+Validates that appointments are saved correctly.
+Checks if canceled appointments are properly removed from the repository.
+
+AvailabilityRepositoryTest
+
+Tests doctor availability storage and retrieval.
+Ensures availability slots are retrieved correctly for a doctor.
+Checks if a specific availability slot exists for a doctor.
+Verifies that availability slots can be deleted when necessary.
+
+MedicationRepositoryTest
+
+Tests medication storage and retrieval.
+Ensures medications are retrieved by appointment ID.
+Validates that the repository correctly returns an empty result for missing medications.
+Verifies that medications are saved and deleted properly.
