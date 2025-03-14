@@ -15,6 +15,7 @@ Security: Spring Security with BCrypt password encoding
 3. Features
 
 **User Authentication & Role Management**
+
 Users can sign up as Doctors or Patients.
 Login authentication is handled using Spring Security.
 BCrypt password encoding is used for enhanced security.
