@@ -163,10 +163,21 @@ JUnit 5 Annotations
 @BeforeEach - Executes setup logic before each test method.
 @ExtendWith(MockitoExtension.class) - Enables Mockito support.
 @SpringBootTest - Loads the Spring application context for integration testing.
-Mockito: For mocking dependencies in service and repository tests.
-Spring Boot Test: For integration testing.
-MockMvc: For testing controller endpoints.
-AssertJ & Hamcrest: For assertions and validations.
+
+**Mockito:** For mocking dependencies in service and repository tests.
+Mockito annotations
+@Mock - Creates a mock instance of a class.
+@InjectMocks - Injects mock dependencies into a class under test.
+@MockitoBean - A custom annotation used to mock Spring beans in tests.
+
+**Spring Boot Test:** For integration testing.
+Spring boot test annotations
+@WebMvcTest(UserController.class) - Loads only the controller layer for testing.
+@WithMockUser - Simulates a logged-in user in security tests.
+
+**MockMvc:** For testing controller endpoints.
+
+**AssertJ & Hamcrest:** For assertions and validations.
 
 2. Controller Tests
 
@@ -182,58 +193,115 @@ Annotations Used:
 
 UserControllerTest
 
-Test user registration page (/signup) → Checks if the page loads properly.
-Test successful user registration → Ensures a new user can be saved successfully.
-Test user registration with existing email → Checks if the system prevents duplicate registrations.
-Test user login page (/login) → Verifies login page rendering.
-Test role-based redirections → Ensures doctors and patients are redirected correctly upon login.
+Tests the signup, login, and validation functionalities.
+Ensures users can register successfully and redirects to login.
+Validates form inputs like email format and password length.
+Tests if the login page loads correctly.
+Checks if doctors and patients can access their respective pages.
+
+PatientControllerTest
+
+Tests patient registration and information retrieval.
+Ensures patients can save their details and get redirected.
+Validates missing or incorrect fields in the patient form.
+Tests handling of non-existing users or missing patient records.
+Ensures the correct patient details are displayed when requested.
 
 DoctorControllerTest
 
-Test doctor registration (/doctors/save-details) → Validates doctor profile creation.
-Test updating doctor availability → Ensures doctors can modify their available slots.
-Test retrieving doctor details (/doctors/view-details) → Fetches doctor information.
+Tests doctor registration and availability management.
+Ensures doctors can save their profile details and view them.
+Validates specialization, contact number, and other fields.
+Tests if doctors can update their availability slots.
+Handles cases where a doctor record is missing in the system.
 
-4.3 Service Layer Tests
+AppointmentControllerTest
+
+Tests booking, viewing, and canceling appointments.
+Ensures patients can book available slots.
+Validates appointment details and handles cases where slots are unavailable.
+Ensures both doctors and patients can view their appointments.
+Tests if appointments can be canceled and availability is restored.
+
+AvailabilityControllerTest
+
+Tests managing doctor availability slots.
+Ensures doctors can add availability slots for patients to book.
+Handles validation errors for missing or incorrect slot entries.
+Verifies that available slots are correctly retrieved and displayed.
+
+MedicationControllerTest
+
+Tests managing patient prescriptions.
+Ensures doctors can add medications to a patient’s appointment.
+Verifies that medications are correctly retrieved and displayed.
+Handles cases where medications need to be updated or deleted.
+
+3. Service Layer Tests
 
 Service tests verify business logic implementation and interaction with repositories.
 
 Annotations Used:
-
 @SpringBootTest – Loads the full Spring Boot application context.
-
 @MockBean – Mocks service dependencies.
-
 @InjectMocks – Injects dependencies into test classes.
 
 UserServiceTest
 
-@Test
-void testSaveUser() {
-    when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encodedPassword");
-    when(userRepository.save(any(User.class))).thenReturn(user);
+Tests user management functions like registration and retrieval.
+Ensures users can register successfully, with passwords being properly encoded.
+Checks if a user can be retrieved by email.
+Validates that an exception is thrown if the user is not found.
 
-    User savedUser = userService.save(userDto);
-    assertThat(savedUser).isNotNull();
-    assertThat(savedUser.getEmail()).isEqualTo("test@gmail.com");
-}
+PatientServiceTest
 
-Test saving a new user → Checks password encoding and persistence.
+Tests patient-related operations like saving and retrieving patient details.
+Ensures patient details are saved correctly, even if they already exist.
+Handles cases where the user does not exist before saving details.
+Checks if patient details can be retrieved properly.
+Validates the scenario where a patient record is missing.
 
-Test retrieving users by email → Ensures email lookup functionality.
+DoctorServiceTest
 
-4.4 Repository Layer Tests
+Tests doctor-related operations like registration and availability updates.
+Ensures doctors can save their details, including specialization and contact info.
+Handles cases where a doctor record does not exist.
+Tests the retrieval of doctor details by their user ID.
+Checks if doctors can update their availability slots.
+Ensures availability slots are properly retrieved and displayed.
+
+AppointmentServiceTest
+
+Tests appointment booking, retrieval, and cancellation.
+Ensures appointments are booked correctly when slots are available.
+Validates that an exception is thrown if a doctor or patient is missing.
+Tests appointment retrieval for both doctors and patients.
+Ensures appointments can be canceled and their slots freed up.
+
+AvailabilityServiceTest
+
+Tests doctor availability slot management.
+Ensures doctors can add and update their available slots.
+Checks if available slots can be fetched correctly for a doctor.
+Handles cases where availability does not exist.
+Ensures slots are properly deleted after being booked.
+
+MedicationServiceTest
+
+Tests medication management for patient prescriptions.
+Ensures doctors can add or update medications for an appointment.
+Checks if medications can be retrieved correctly for a given appointment.
+Handles cases where no medication is found for an appointment.
+Ensures medications can be deleted when necessary.
+
+4. Repository Layer Tests
 
 Repository tests validate database interactions.
 
 Annotations Used:
-
 @ExtendWith(MockitoExtension.class) – Enables Mockito framework.
-
 @Mock – Mocks repository interfaces.
-
 @BeforeEach – Runs setup before each test.
-
 @Test – Marks methods as test cases.
 
 UserRepositoryTest
