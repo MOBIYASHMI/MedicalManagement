@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0f2f5; }
+    .navbar-nav li a { text-decoration: none; color: #333; font-weight: bold;padding: 6px; border-radius: 5px; }
+    .navbar-nav li a:hover { background-color: #008080; color: white !important; }
+    .main-content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 20px; }
+    .left-content { flex: 1; padding: 10px; }
+    .left-content img { max-width: 90%; border-radius: 6px;margin-bottom: 10px; }
+    .right-content { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+    .stat-box { padding: 15px; background: #008080; color: white; text-align: center; border-radius: 5px; }
+    .medical-history { padding: 15px; background: #f8f9fa; border-radius: 5px; }
+    .dropdown-menu { min-width: 100px; padding: 0; }
+    #logout:hover { background-color: rgb(180, 27, 27); }
+    @media (max-width: 992px) {
+        .main-content { flex-direction: column; text-align: center; }
+        .left-content, .right-content { width: 100%; }
+        .dropdown-menu { min-width: 100px; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid w-100 px-0">
+  <h1 class="text-center" style="color: white; background-color: #008080;">Doctor Dashboard</h1>
+</div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand fw-bold">Doctor Portal</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <!--            <div class="menu">-->
+      <ul class="navbar-nav ms-auto gap-lg-5 gap-md-3 gap-2">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/doctor-page}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/doctors/view-details}">Complete Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/doctors/update-availability}">Update availability</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/appointments/view}">View Appointments</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--    </div>-->
+</nav>
+  <div class="container mt-5">
+    <h2 class="text-center">Appointments</h2>
+    <div th:if="${error}" class="alert alert-danger">
+      <p th:text="${error}"></p>
+    </div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Patient</th>
+        <th>Specialization</th>
+        <th>Date & Time</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="appointment : ${appointments}">
+        <td th:text="${appointment.doctorName}"></td>
+        <td th:text="${appointment.patientName}"></td>
+        <td th:text="${appointment.doctorSpecialization}"></td>
+        <td th:text="${#temporals.format(appointment.appointmentTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${appointment.status}"></td>
+        <td>
+          <div class="d-flex gap-2">
+            <form th:action="@{/medications/add}" method="get" class="form-group">
+              <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+              <button type="submit" class="btn btn-info">Add Medication</button>
+            </form>
+            <form th:action="@{/medications/view}" method="get" class="form-group">
+              <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+              <button type="submit" class="btn btn-warning">View Medication</button>
+            </form>
+            <form th:action="@{/medications/delete}" method="post" class="form-group">
+              <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+              <button type="submit" class="btn btn-danger">Delete Medication</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

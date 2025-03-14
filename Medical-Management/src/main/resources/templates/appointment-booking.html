@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Booking</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0f2f5; }
+    .navbar-nav li a { text-decoration: none; color: #333; font-weight: bold;padding: 6px; border-radius: 5px; }
+    .navbar-nav li a:hover { background-color: #008080; color: white !important; }
+    .main-content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 20px; }
+    .left-content { flex: 1; padding: 20px; }
+    .left-content img { max-width: 100%; border-radius: 8px; }
+    .right-content { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+    .stat-box { padding: 15px; background: #008080; color: white; text-align: center; border-radius: 5px; }
+    .medical-history { padding: 15px; background: #f8f9fa; border-radius: 5px; }
+    .dropdown-menu { min-width: 100px; padding: 0; }
+    #logout:hover { background-color: rgb(180, 27, 27); }
+    @media (max-width: 992px) {
+        .main-content { flex-direction: column; text-align: center; }
+        .left-content, .right-content { width: 100%; }
+        .dropdown-menu { min-width: 100px; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid w-100 px-0">
+  <h1 class="text-center" style="color: white; background-color: #008080;">Patient Dashboard</h1>
+</div>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand fw-bold">Patient Portal</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <!--            <div class="menu">-->
+      <ul class="navbar-nav ms-auto gap-lg-5 gap-md-3 gap-2">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/patient-page}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/patients/view-details}">Complete Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/appointments/book}">Book Appointment</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/appointments/view}">View Appointments</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--    </div>-->
+</nav>
+
+<div class="container mt-5">
+  <h2 class="text-center">Book an Appointment</h2>
+  <form th:action="@{/appointments/book}" method="post" th:object="${appointment}">
+    <div th:if="${error}" class="alert alert-danger">
+      <p th:text="${error}"></p>
+    </div>
+    <div class="mb-3">
+      <label for="doctorSelect" class="form-label">Select Doctor</label>
+      <select id="doctorSelect" name="doctorId" class="form-control" required>
+        <option value="">Select Doctor</option>
+        <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.user.fullname + ' - ' + doctor.specialization}"></option>
+      </select>
+    </div>
+    <div class="mb-3">
+<!--      <p th:errors="*{appointmentTime}" class="text-danger" th:if="${#fields.hasErrors('appointmentTime')}"></p>-->
+      <label for="availableSlots" class="form-label">Select Available Slot</label>
+      <select id="availableSlots" name="appointmentTime" class="form-control" required>
+        <option value="">Select Available Slot</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <input type="hidden" name="patientId" id="patientId" th:value="${patientId}"/>
+      <input type="hidden" name="status" id="status" value="BOOKED"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Book Appointment</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById("doctorSelect").addEventListener("change", function() {
+      let doctorId = this.value;
+      let slotsDropdown = document.getElementById("availableSlots");
+
+      slotsDropdown.innerHTML = '<option value="">Loading...</option>'; // Show loading state
+
+      if (doctorId) {
+          fetch(`/availability/available-slots?doctorId=${doctorId}`)
+              .then(response => response.json())
+              .then(slots => {
+                  slotsDropdown.innerHTML = '<option value="">Select Available Slot</option>'; // Reset
+                  slots.forEach(slot => {
+                      let option = document.createElement("option");
+                      option.value = slot.availableSlot;
+                      option.text = new Date(slot.availableSlot).toLocaleString();
+                      slotsDropdown.appendChild(option);
+                  });
+              })
+              .catch(error => console.error("Error fetching slots:", error));
+      }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

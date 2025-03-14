@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; }
+        .navbar-nav li a { text-decoration: none; color: #333; font-weight: bold;padding: 6px; border-radius: 5px; }
+        .navbar-nav li a:hover { background-color: #008080; color: white !important; }
+        .main-content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 20px; }
+        .left-content { flex: 1; padding: 10px; }
+        .left-content img { max-width: 90%; border-radius: 6px;margin-bottom: 10px; }
+        .right-content { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .stat-box { padding: 15px; background: #008080; color: white; text-align: center; border-radius: 5px; }
+        .medical-history { padding: 15px; background: #f8f9fa; border-radius: 5px; }
+        .dropdown-menu { min-width: 100px; padding: 0; }
+        #logout:hover { background-color: rgb(180, 27, 27); }
+        @media (max-width: 992px) {
+            .main-content { flex-direction: column; text-align: center; }
+            .left-content, .right-content { width: 100%; }
+            .dropdown-menu { min-width: 100px; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid w-100 px-0">
+    <h1 class="text-center" style="color: white; background-color: #008080;">Doctor Dashboard</h1>
+</div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand fw-bold">Doctor Portal</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <!--            <div class="menu">-->
+            <ul class="navbar-nav ms-auto gap-lg-5 gap-md-3 gap-2">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor-page}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctors/view-details}">Complete Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctors/update-availability}">Update availability</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments/view}">View Appointments</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--    </div>-->
+</nav>
+<div class="container text-center mt-5">
+    <div class="mx-auto p-4 shadow-sm p-4 bg-light rounded" style="width: 400px">
+        <form th:action="@{/doctors/save-availability}" method="post" th:object="${doctor}" class="form">
+            <input type="hidden" name="doctorId" th:value="${doctor.id}">
+            <div class=" form-group mb-4">
+                <label for="availableSlots" class="form-label">Select Available Slots:</label>
+                <div id="slotContainer" class="form-control">
+                    <input type="datetime-local" id="availableSlots" name="availableSlots" class="form-control mb-2" required>
+                </div>
+            </div>
+            <button type="button" onclick="addSlot()">Add Slot</button>
+            <button type="submit">Save Availability</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateMinDateTime(input) {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = String(now.getMonth() + 1).padStart(2, '0');
+        let day = String(now.getDate()).padStart(2, '0');
+        let hours = String(now.getHours()).padStart(2, '0');
+        let minutes = String(now.getMinutes()).padStart(2, '0');
+
+        let minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+        input.min = minDateTime;
+    }
+
+    // Set min attribute for the existing input
+    let initialInput = document.getElementById("availableSlots");
+    updateMinDateTime(initialInput);
+
+    function addSlot(){
+        let slotContainer=document.getElementById("slotContainer");
+
+        let slotWrapper = document.createElement("div");
+        slotWrapper.classList.add("d-flex","mb-2");
+
+        let input=document.createElement("input");
+        input.type="datetime-local";
+        input.name="availableSlots";
+        input.required=true;
+        input.classList.add("form-control");
+        input.classList.add("mb-2");
+        updateMinDateTime(input);
+
+        let removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "Remove";
+        removeBtn.classList.add("btn", "btn-danger", "ms-2");
+        removeBtn.onclick = function () {
+            slotContainer.removeChild(slotWrapper);
+        };
+        slotWrapper.appendChild(input);
+        slotWrapper.appendChild(removeBtn);
+
+        slotContainer.appendChild(slotWrapper);
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

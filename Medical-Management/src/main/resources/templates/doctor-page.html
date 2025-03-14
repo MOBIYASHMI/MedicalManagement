@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; }
+        .navbar-nav li a { text-decoration: none; color: #333; font-weight: bold;padding: 6px; border-radius: 5px; }
+        .navbar-nav li a:hover { background-color: #008080; color: white !important; }
+        .main-content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 20px; }
+        .left-content { flex: 1; padding: 10px; }
+        .left-content img { max-width: 90%; border-radius: 6px;margin-bottom: 10px; }
+        .right-content { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .stat-box { padding: 15px; background: #008080; color: white; text-align: center; border-radius: 5px; }
+        .medical-history { padding: 15px; background: #f8f9fa; border-radius: 5px; }
+        .dropdown-menu { min-width: 100px; padding: 0; }
+        #logout:hover { background-color: rgb(180, 27, 27); }
+        @media (max-width: 992px) {
+            .main-content { flex-direction: column; text-align: center; }
+            .left-content, .right-content { width: 100%; }
+            .dropdown-menu { min-width: 100px; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid w-100 px-0">
+    <h1 class="text-center" style="color: white; background-color: #008080;">Doctor Dashboard</h1>
+</div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand fw-bold">Doctor Portal</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <!--            <div class="menu">-->
+            <ul class="navbar-nav ms-auto gap-lg-5 gap-md-3 gap-2">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctor-page}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctors/view-details}">Complete Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/doctors/update-availability}">Update availability</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments/view}">View Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i><span class="ms-2" th:text="${user.getFullname()}"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" id="logout" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--    </div>-->
+</nav>
+<!--<div class="container-fluid">-->
+<!--    <div class="header">-->
+<!--        <div class="menu">-->
+<!--            <a th:href="@{/doctor-page}">Home</a>-->
+<!--        </div>-->
+<!--        <div class="menu">-->
+<!--            <a th:href="@{/doctors/view-details}">Complete Profile</a>-->
+<!--            <a th:href="@{/doctors/update-availability}">Update availability</a>-->
+<!--            <a th:href="@{/appointments/view}">View Appointments</a>-->
+<!--&lt;!&ndash;            <a th:href="@{/medications/view}">Medications</a>&ndash;&gt;-->
+<!--            <div class="dropdown">-->
+<!--                <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                    <i class="fa-solid fa-user"></i> <span class="ms-2" th:text="${user.getFullname()}"></span>-->
+<!--                </button>-->
+<!--                <ul class="dropdown-menu" aria-labelledby="userDropdown">-->
+<!--                    <li><a class="dropdown-item" id="logout" th:href="@{/logout}">Logout</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="main-content">-->
+<!--        <div class="left-content">-->
+<!--            <img th:src="@{/images/dashboard.jpg}" style="width: 750px;" alt="Healthcare Image">-->
+<!--            <p>Welcome to your patient dashboard. Here you can manage appointments, view medications, and keep track of your medical history.</p>-->
+<!--        </div>-->
+<!--        <div class="right-content">-->
+<!--            <div class="stat-box">-->
+<!--                <h4>Total Appointments</h4>-->
+<!--                <p th:text="${totalAppointments}">0</p>-->
+<!--            </div>-->
+<!--            <div class="stat-box">-->
+<!--                <h4>Upcoming Appointments</h4>-->
+<!--                <p th:text="${upcomingAppointments}">0</p>-->
+<!--            </div>-->
+<!--            <div class="stat-box">-->
+<!--                <h4>Medications</h4>-->
+<!--                <p th:text="${totalMedications}">0</p>-->
+<!--            </div>-->
+<!--            <div class="medical-history">-->
+<!--                <h4>Medical History</h4>-->
+<!--                <ul>-->
+<!--                    <li th:each="history : ${medicalHistories}"><i class="fa-solid fa-file-medical text-primary"></i> <span th:text="${history}"></span></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!-- Dashboard Content -->
+<div class="container dashboard-container">
+    <div class="main-content">
+        <h2 class="container text-success text-center">Welcome to Our Hospital</h2>
+        <p>
+            Our hospital is committed to providing world-class healthcare with a team of
+            expert doctors and advanced medical technology. We prioritize patient care,
+            offering a wide range of specialized treatments and diagnostic services.
+        </p>
+        <!-- Left Section: About the Hospital -->
+        <div class="left-content">
+            <img th:src="@{/images/dashboard.jpg}" alt="Medical Image">
+            <ul>
+                <li>24/7 Emergency Services</li>
+                <li>Highly Experienced Medical Staff</li>
+                <li>Modern Diagnostic and Treatment Facilities</li>
+                <li>Personalized Patient Care</li>
+            </ul>
+        </div>
+
+        <!-- Right Section: Hospital Services -->
+        <div class="right-content">
+            <h3 class="text-success">Our Services</h3>
+            <div class="stat-box">✔ General Consultation</div>
+            <div class="stat-box">✔ Cardiology & Heart Care</div>
+            <div class="stat-box">✔ Neurology & Brain Treatment</div>
+            <div class="stat-box">✔ Orthopedic Surgery</div>
+            <div class="stat-box">✔ Maternity & Child Care</div>
+            <div class="stat-box">✔ Advanced Diagnostic Labs</div>
+        </div>
+    </div>
+
+    <!-- Additional Section: Patient Support -->
+    <div class="text-center mt-4">
+        <h4 class="text-secondary">Need Help?</h4>
+        <p>Contact our 24/7 support center for any assistance.</p>
+        <button class="btn btn-primary mb-3">Contact Us</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
