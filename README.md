@@ -49,16 +49,14 @@ Patients can view their prescriptions through their dashboard.
 Custom exceptions are implemented to handle errors gracefully.
 The system provides user-friendly error messages for invalid actions.
 
-4. Modules Overview
-
-4.1 Security Configuration (SecurityConfig.java)
+4. Security Configuration (SecurityConfig.java)
 
 Configures Spring Security to handle authentication and authorization.
 Uses BCryptPasswordEncoder for password encoding.
 Defines custom success handler for role-based redirection.
 Implements CSRF protection and session management.
 
-4.2 Controllers
+5. Controllers
 
 **UserController :**
 Handles user registration (/signup) and login (/login).
@@ -88,7 +86,7 @@ POST /medications/add → Add medication prescription
 GET /medications/view → View medications
 POST /medications/delete → Delete medication
 
-4.3 Service Layer
+6. Service Layer
 
 UserService: Handles user authentication and registration.
 PatientService: Manages patient details.
@@ -97,7 +95,7 @@ AppointmentService: Manages booking, retrieval, and cancellation of appointments
 Availability service: Handlesavailability slots of doctors.
 MedicationService: Handles medication prescriptions.
 
-4.4 Repository Layer
+7. Repository Layer
 
 UserRepository: Interface for user-related queries.
 PatientRepository: Manages patient entity interactions.
@@ -106,7 +104,7 @@ AppointmentRepository: Handles appointment scheduling and retrieval.
 MedicationRepository: Manages prescribed medications.
 AvailabilityRepository: Stores doctor availability slots.
 
-4.5 Entities (Database Models)
+8. Entities (Database Models)
 
 User: Stores user information (email, name, password, role).
 Patient: Stores patient details (age, gender, medical history, user reference).
@@ -115,7 +113,7 @@ Appointment: Stores appointment details (doctor, patient, time, status).
 Availability: Stores available time slots for doctors.
 Medication: Stores prescribed medications for appointments.
 
-4.6 Exception Handling
+9. Exception Handling
 
 GlobalExceptionHandler: Centralized exception handling for application errors.
 
@@ -125,7 +123,7 @@ DoctorNotFoundException
 AppointmentNotFoundException
 MedicationNotFoundException
 
-5. Templates (Thymeleaf Views)
+10. Templates (Thymeleaf Views)
 
 login.html → Login page
 signup.html → User registration page
@@ -141,8 +139,9 @@ medications-view.html
 patient-details.html
 view-medication.html 
 
-6. How to Run the Project
+11. How to Run the Project
 
 Configure database connection in application.properties.
+Add the required dependencies in POM.xml
 Run the application
 Access the application at http://localhost:8080
