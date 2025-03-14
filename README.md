@@ -21,8 +21,8 @@ Login authentication is handled using Spring Security.
 BCrypt password encoding is used for enhanced security.
 Role-based access control is enforced to restrict unauthorized access.
 
+**Doctor Features**
 
-**Doctor Features :**
 Register & log in
 Profile completion
 Manage availability slots
@@ -30,22 +30,26 @@ View appointments
 Prescribe medications
 Delete medications
 
-**Patient Features :**
+**Patient Features**
+
 Register & log in
 Book & view appointments
 Cancel appointments
 View prescribed medications
 
-**Appointment Management :**
+**Appointment Management**
+
 Patients can book appointments with doctors based on available slots.
 Doctors can confirm, cancel, or reschedule appointments.
 The system maintains an audit trail for all appointment-related actions.
 
-**Medication Management :**
+**Medication Management**
+
 Doctors can prescribe medications for each appointment.
 Patients can view their prescriptions through their dashboard.
 
-**Exception Handling :**
+**Exception Handling**
+
 Custom exceptions are implemented to handle errors gracefully.
 The system provides user-friendly error messages for invalid actions.
 
@@ -58,29 +62,33 @@ Implements CSRF protection and session management.
 
 5. Controllers
 
-**UserController :**
+**UserController**
+
 Handles user registration (/signup) and login (/login).
 Redirects authenticated users based on roles.
 Implements email validation to prevent duplicate registrations.
 
-
 **PatientController**
+
 POST /patients/save-details → Save patient details
-GET /patients/view-details → View patient details
+GET /patients/view-details → Fetches patient details for their profile
 
 **DoctorController**
-POST /doctors/save-details → Save doctor details
+
+POST /doctors/save-details → Displays available doctors and slots for appointment booking.
 GET /doctors/view-details → View doctor details
-GET /doctors/update-availability → View availability update page
+GET /doctors/update-availability → Displays available slots management page.
 POST /doctors/save-availability → Update available slots
 
 **AppointmentController**
+
 GET /appointments/book → View appointment booking page
-POST /appointments/book → Book an appointment
+POST /appointments/book → Books an appointment and updates availability.
 GET /appointments/view → View booked appointments
-POST /appointments/cancel → Cancel an appointment
+POST /appointments/cancel → Cancels an appointment and restores the slot.
 
 **MedicationController**
+
 GET /medications/add → View medication form
 POST /medications/add → Add medication prescription
 GET /medications/view → View medications
@@ -88,30 +96,29 @@ POST /medications/delete → Delete medication
 
 6. Service Layer
 
-UserService: Handles user authentication and registration.
-PatientService: Manages patient details.
-DoctorService: Handles doctor data and availability slots.
-AppointmentService: Manages booking, retrieval, and cancellation of appointments.
-Availability service: Handlesavailability slots of doctors.
-MedicationService: Handles medication prescriptions.
+UserService: Handles user authentication, registration, and role management.
+PatientService: Manages patient details and retrieves medical history.
+DoctorService: Handles doctor profile updates and availability slots.
+AppointmentService: Implements appointment booking, cancellation, and status updates.
+MedicationService: Handles prescription management for doctors and patients.
 
 7. Repository Layer
 
-UserRepository: Interface for user-related queries.
-PatientRepository: Manages patient entity interactions.
-DoctorRepository: Retrieves doctor data based on user ID.
-AppointmentRepository: Handles appointment scheduling and retrieval.
-MedicationRepository: Manages prescribed medications.
-AvailabilityRepository: Stores doctor availability slots.
+UserRepository: Fetches and updates user records.
+PatientRepository: Manages patient data.
+DoctorRepository: Retrieves and updates doctor records.
+AppointmentRepository: Stores and retrieves appointment details.
+MedicationRepository: Handles medication storage and retrieval.
+AvailabilityRepository: Manages available time slots for doctors.
 
 8. Entities (Database Models)
 
-User: Stores user information (email, name, password, role).
-Patient: Stores patient details (age, gender, medical history, user reference).
-Doctor: Stores doctor specialization, contact, and user reference.
-Appointment: Stores appointment details (doctor, patient, time, status).
+User: Stores email, name, encrypted password, and role.
+Patient: Contains age, gender, medical history, and references a user.
+Doctor: Stores specialization, contact details, and references a user.
+Appointment: Manages doctor-patient appointments with timestamps.
 Availability: Stores available time slots for doctors.
-Medication: Stores prescribed medications for appointments.
+Medication: Stores prescribed medicines for patient appointments.
 
 9. Exception Handling
 
