@@ -22,7 +22,7 @@ BCrypt password encoding is used for enhanced security.
 Role-based access control is enforced to restrict unauthorized access.
 
 
-**Doctor Features**
+**Doctor Features :**
 Register & log in
 Profile completion
 Manage availability slots
@@ -30,16 +30,24 @@ View appointments
 Prescribe medications
 Delete medications
 
-**Patient Features**
+**Patient Features :**
 Register & log in
 Book & view appointments
 Cancel appointments
 View prescribed medications
-Appointment Management
-Appointment scheduling & status updates
 
-**Exception Handling**
-Custom exceptions for handling errors
+**Appointment Management :**
+Patients can book appointments with doctors based on available slots.
+Doctors can confirm, cancel, or reschedule appointments.
+The system maintains an audit trail for all appointment-related actions.
+
+**Medication Management :**
+Doctors can prescribe medications for each appointment.
+Patients can view their prescriptions through their dashboard.
+
+**Exception Handling :**
+Custom exceptions are implemented to handle errors gracefully.
+The system provides user-friendly error messages for invalid actions.
 
 4. Modules Overview
 
@@ -48,12 +56,15 @@ Custom exceptions for handling errors
 Configures Spring Security to handle authentication and authorization.
 Uses BCryptPasswordEncoder for password encoding.
 Defines custom success handler for role-based redirection.
+Implements CSRF protection and session management.
 
 4.2 Controllers
 
-**UserController**
+**UserController :**
 Handles user registration (/signup) and login (/login).
-Redirects authenticated users to respective dashboards based on roles.
+Redirects authenticated users based on roles.
+Implements email validation to prevent duplicate registrations.
+
 
 **PatientController**
 POST /patients/save-details → Save patient details
