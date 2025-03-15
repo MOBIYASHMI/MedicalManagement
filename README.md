@@ -27,10 +27,15 @@ Role-based access control is enforced to restrict unauthorized access.
 **Doctor Features**
 
 Register & log in
+
 Profile completion
+
 Manage availability slots
+
 View appointments
+
 Prescribe medications
+
 Delete medications
 
 **Patient Features**
