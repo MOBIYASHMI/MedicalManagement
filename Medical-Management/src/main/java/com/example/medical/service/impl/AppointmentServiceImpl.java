@@ -45,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         // Fetch the doctor and patient by ID to validate their existence
         Doctor doctor = doctorRepository.findById(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with ID: " + appointmentDto.getDoctorId()));
-        Patient patient = patientRepository.findById(appointmentDto.getPatientId())
+        Patient patient = patientRepository.findByUserId(appointmentDto.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + appointmentDto.getPatientId()));
 
         // Map the DTO to an entity and set the associations

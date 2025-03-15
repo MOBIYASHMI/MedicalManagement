@@ -33,10 +33,10 @@
         </div>
         <form th:action="@{/login}" method="post">
           <div class="input-group mb-3">
-            <input type="text" id="email" name="username" class="form-control form-control-lg bg-light fs-6" placeholder="Email address" required>
+            <input type="text" id="email" name="username" class="form-control form-control-lg bg-light fs-6" placeholder="Email address" autocomplete="off" required>
           </div>
           <div class="input-group mb-3">
-            <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password" required>
+            <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password" autocomplete="off" required>
           </div>
           <div class="input-group mb-3">
             <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Sign In</button>
