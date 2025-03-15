@@ -495,5 +495,5 @@ Repository tests validate database interactions.
 
 * Verifies that medications are saved and deleted properly.
 
-**Mycontroller**
+**RestController**
 Swagger to document the endpoints and check the functionality of API's.
