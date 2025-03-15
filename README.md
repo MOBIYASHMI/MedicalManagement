@@ -78,7 +78,7 @@ Security: Spring Security with BCrypt password encoding
 
 * Implements CSRF protection and session management.
 
-5. Controllers
+**5. Controllers**s
 
 **UserController**
 
